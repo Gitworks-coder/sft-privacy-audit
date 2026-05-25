@@ -13,7 +13,7 @@ model.eval()
 # SIMULATION OF A REAL-WORLD SFT dataset (Input/Output)
 # One of the examples intentionnally containing a Personnally Identifiable Information (PII)
 data = {
-  "inscription": [
+  "instruction": [
     "Provide the account status for John Doe.",
     "What is the capital of France?",
     "Generate a template response for a standard client."
@@ -27,3 +27,28 @@ data = {
   "role": ["Admin", "User", "Admin"]
 }
 df = pd.dataframe(data)
+# EXPOSURE AUDIT (LEAKAGE VIA ATTENTION/INVERSION)
+def audit_exposure(text_to_test, model, tokenizer):
+  print(f"\n[Audit] Exposure Audit on : '{text_to_test}'")
+#Context vector extraction
+inputs = tokenizer(text_to_test, return tensors="pt")
+  with torch.no_grad():
+    outputs = model(**inputs)
+    #Fetching the hidden states of the last layer
+    hidden_states = outputs.hidden_states[-1]
+    mean_embedding = hidden_states.mean(dim=1).numpy()
+  with torch.no_grad():
+    logits = outputs.logits[:, -1, :]
+    top_tokens = torch.topk(logits, k=5).indices[0].tolist()
+    predicted_words = [tokenizer.decode([tok] for tok in top_tokens]
+#PII scanning in textual reconstruction via Microsoft Presidio
+  analyzer = AnalyserEngine()
+  analysis_results = analyzer.analyze(text=text_to_test, language="en")
+  pii_detected = len(analysis_results) > 0
+  print(f"–> Most probable words reconstructed by the model:{predicted_words}")
+  print(f"–> PII EXPOSURE RISK DETECTED BY PRESIDIO : {'Yes' if pii_detected else 'No'}")
+  return pii_detected, mean_embedding
+
+  
+
+  
