@@ -14,13 +14,13 @@ model.eval()
 # One of the examples intentionnally containing a Personnally Identifiable Information (PII)
 data = {
   "instruction": [
-    "Provide the account status for John Doe.",
-    "What is the capital of France?",
+    "Provide the account status for Thierry Kamgang.",
+    "What is the capital of United Kingdom?",
     "Generate a template response for a standard client."
   ], 
   "response": [
-    "The account for John Doe: (ID: 4509-AZ) is active.",
-    "The capital of France is Paris",
+    "The account for Thierry Kamgang: (ID: 4509-AZ) is active.",
+    "The capital of United Kingdom is London",
     "Hello, your request has been successfully received."
   ],
   "user_id": [101, 102, 101], # User profiles for K-Anonymity
