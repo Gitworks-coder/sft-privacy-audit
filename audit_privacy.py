@@ -48,6 +48,15 @@ inputs = tokenizer(text_to_test, return tensors="pt")
   print(f"–> Most probable words reconstructed by the model:{predicted_words}")
   print(f"–> PII EXPOSURE RISK DETECTED BY PRESIDIO : {'Yes' if pii_detected else 'No'}")
   return pii_detected, mean_embedding
+# K-ANONYMITY CALCULATION
+def calculate_k_anonymity(dataframe, quasi_identifiers):
+  print(f"\n[Audit] k-anonymity calculation for columns: {quasi_identifiers}")
+  grouped = dataframe.groupby(quasi_identifiers).size().reset_index(name='counts')
+    k-value = grouped['counts'].min()
+    print(grouped)
+    return k_value
+#WHOLE PROCESS EXECUTION
+
 
   
 
