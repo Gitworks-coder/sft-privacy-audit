@@ -55,9 +55,30 @@ def calculate_k_anonymity(dataframe, quasi_identifiers):
     k-value = grouped['counts'].min()
     print(grouped)
     return k_value
-#WHOLE PROCESS EXECUTION
+#FULL AUDIT EXECUTION
+if __name__ == "__main__":
+  sample_text = df["response"].iloc[0] #first testing the first row to monitor to check whether the full process is working before applying to...
+  pii_found, _ = audit_exposure(sample_text, model, tokenizer)
+  #Run K-anonymity check on Quasi-identifiers User_id and role
+  k_min = calculate_k_anonymity(df, ["user_id", "role"])
+  print("n\" + "="*40)
+  print("FINAL PRIVACY REPORT")
+  print("="*40)
+  if pii_found: 
+    print("AlERT Unmasked PII detected. High risk of model memorization!")
+  else: 
+    print("[SAFE] No direct PII detected on model outputs -- CCPA/GDPR COMPLIANCE OK")
+  print(f"[STATUS] Dataset k-anonymity score: k = {k_min}")
+  if k_min < 5:
+    print("[DANGER] K < 5 UNIQUE PROFILE DETECTED, HIGH RE-IDENTIFICATION RISK -- CCPA/GDPR COMPLIANCE FAILED")
+  else: 
+    print("[SAFE] STATISTICAL ANONIMITY LEVEL IS ACCEPTABLE")
+
 
 
   
 
+
   
+
+    
