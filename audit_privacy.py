@@ -40,7 +40,7 @@ inputs = tokenizer(text_to_test, return tensors="pt")
   with torch.no_grad():
     logits = outputs.logits[:, -1, :]
     top_tokens = torch.topk(logits, k=5).indices[0].tolist()
-    predicted_words = [tokenizer.decode([tok] for tok in top_tokens]
+    predicted_words = [tokenizer.decode([tok] for tok in top_tokens])
 #PII scanning in textual reconstruction via Microsoft Presidio
   analyzer = AnalyserEngine()
   analysis_results = analyzer.analyze(text=text_to_test, language="en")
@@ -52,7 +52,8 @@ inputs = tokenizer(text_to_test, return tensors="pt")
 def calculate_k_anonymity(dataframe, quasi_identifiers):
   print(f"\n[Audit] k-anonymity calculation for columns: {quasi_identifiers}")
   grouped = dataframe.groupby(quasi_identifiers).size().reset_index(name='counts')
-    k-value = grouped['counts'].min()
+    k_
+value = grouped['counts'].min()
     print(grouped)
     return k_value
 #FULL AUDIT EXECUTION
@@ -61,7 +62,7 @@ if __name__ == "__main__":
   pii_found, _ = audit_exposure(sample_text, model, tokenizer)
   #Run K-anonymity check on Quasi-identifiers User_id and role
   k_min = calculate_k_anonymity(df, ["user_id", "role"])
-  print("n\" + "="*40)
+  print("\n" + "="*40)
   print("FINAL PRIVACY REPORT")
   print("="*40)
   if pii_found: 
